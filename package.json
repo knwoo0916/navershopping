@@ -1,0 +1,36 @@
+{
+  "name": "jobmatch",
+  "version": "0.0.1",
+  "description": "취업맞춤반 학생을 위한 수업 강의",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeeDaun/jobmatch.git"
+  },
+  "keywords": [
+    "node"
+  ],
+  "author": "ldu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LeeDaun/jobmatch/issues"
+  },
+  "homepage": "https://github.com/LeeDaun/jobmatch#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "bootstrap": "^4.3.1",
+    "charset": "^1.0.1",
+    "cheerio": "^1.0.0-rc.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "express-mysql-session": "^2.1.0",
+    "express-session": "^1.16.1",
+    "iconv-lite": "^0.4.24",
+    "jquery": "^3.4.0",
+    "popper.js": "^1.15.0",
+    "request": "^2.88.0"
+  }
+}

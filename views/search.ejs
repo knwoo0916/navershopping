@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<% include layout/head %>
+
+<body>
+    <% include layout/nav %>
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-10 offset-1">
+                <form class="form-inline" method="post">
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label for="word" class="sr-only">검색어</label>
+                        <input type="text" name="word" class="form-control" id="word" placeholder="검색어 입력">
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2">검색하기</button>
+                </form>
+            </div>
+        </div>
+        <% if(typeof list != 'undefined') {
+                    for(let i = 0; i < list.length; i++) { %>
+        <a href="https://search.shopping.naver.com/detail/popup_big.nhn?nv_mid=<%= list[i].zoom %>" target="_blank"><img
+                src="<%= list[i].img %>" alt="img"></a>
+        <ul class="list-group">
+            <a href="<%= list[i].link %>" target="_blank" class="list-group-item list-group-item-action active">품명 :
+                <%= list[i].title %></a>
+            <li href="#" class="list-group-item list-group-item-action">가격 : <%= list[i].price %></li>
+            <li href="#" class="list-group-item list-group-item-action">카테고리 : <%= list[i].category %></li>
+            <li href="#" class="list-group-item list-group-item-action">상세설명 : <%= list[i].detail %></li>
+            <li href="#" class="list-group-item list-group-item-action">기타 : <%= list[i].review %></li><br>
+        </ul>
+        <% }
+                } %>
+    </div>
+</body>
+
+</html>

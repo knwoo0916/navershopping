@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<% include layout/head %>
+
+<body>
+    <% include layout/nav %>
+    <div class="container">
+        <div class="row mt-4">
+            <h1>게시판</h1>
+            <div class="col-10 offset-1">
+                <table class="table table-striped">
+                    <tr>
+                        <th>카테고리번호</th>
+                        <th>카테고리</th>
+                        <th>검색결과수</th>
+                    </tr>
+                    <% if(typeof list != 'undefined') { 
+                     for(let i = 0; i < list.length; i++) {  %>
+                    <tr>
+                        <td><%= list[i].ct_num %></td>
+                        <td><%= list[i].ct_name %></td>
+                        <td><%= list[i].ct_result %></td>
+                    </tr>
+                    <% } 
+                } %>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
