@@ -8,7 +8,6 @@ const qs = require('querystring');
 const iconv = require('iconv-lite');  //인코딩 변환도구
 const charset = require('charset');  //캐릭터셋 체크 도구
 const mysql = require('mysql');
-const dbinfo = require('./dbinfo');
 
 /* mysql 연결부분 */
 const conn = mysql.createConnection({
@@ -86,13 +85,14 @@ app.post('/search', function (req, res) {
             let zoom = $(product_list[i]).find(".zoom").attr("data-nv-mid");
             list.push({ title: title, price: price, category: category, detail: detail, review: review, link: link, img: img, zoom: zoom });
         }
+
         res.render('search', { list: list });
     });
 });
 app.get('/board', function (req, res) {
     for (let i = 0; i <= 10; i++) {
         let k;
-        if(i >= 10) {
+        if (i >= 10) {
             k = i;
         } else {
             k = "0" + i;
@@ -105,121 +105,51 @@ app.get('/board', function (req, res) {
             let product_list = $(".container_inner");
             let list = [];
 
-            let ct_num = i;
+            let ct_num = i + 1;
             let ct_name = $(product_list).find(".pic a").text();
-            let ct_result = $(product_list).find("._productSet_total").text().replace("\n\t\t\t\t\t\t\t\t\t전체", "");
+            let ct_result = $(product_list).find("._productSet_total").text().replace("\n\t\t\t\t\t\t\t\t\t전체", "").replace(",", "").replace(",", "");
 
             list = [[ct_num, ct_name, ct_result]];
-            console.log([list]);
+
             let sql = "INSERT INTO shopping(ct_num, ct_name, ct_result) VALUES ?;";
             conn.query(sql, [list], function (err, result, fields) { });
         });
     }
     let sql = "SELECT * FROM shopping;";
-    conn.query(sql, function(err, result) {
-        res.render('board', {msg: '카테고리별 검색결과 수', list: result});
-    })
+    conn.query(sql, function (err, result) {
+        res.render('board', { msg: '카테고리별 검색결과 수', list: result });
+    });
 });
 app.get('/datalab2', function (req, res) {
-    res.render('datalab2', {});
+    for (let i = 0; i <= 10; i++) {
+        let k;
+        if (i >= 10) {
+            k = i;
+        } else {
+            k = "0" + i;
+        }
+        let url = "https://search.shopping.naver.com/search/category.nhn?pagingIndex=1&pagingSize=40&viewType=list&sort=rel&cat_id=500000" + k + "&frm=NVSHCAT";
+        request(url, function (err, response, body) {
 
-    // for (let i = 0; i <= 10; i++) {
-    //     let k;
-    //     if(i >= 10) {
-    //         k = i;
-    //     } else {
-    //         k = "0" + i;
-    //     }
-    //     let url = "https://search.shopping.naver.com/search/category.nhn?pagingIndex=1&pagingSize=40&viewType=list&sort=rel&cat_id=500000" + k + "&frm=NVSHCAT";
-    //     request(url, function (err, response, body) {
+            $ = cheerio.load(body);
 
-    //         $ = cheerio.load(body);
+            let product_list = $(".container_inner");
+            let list = [];
 
-    //         let product_list = $(".container_inner");
-    //         let list = [];
+            let ct_num = i + 1;
+            let ct_name = $(product_list).find(".pic a").text();
+            let ct_result = $(product_list).find("._productSet_total").text().replace("\n\t\t\t\t\t\t\t\t\t전체", "").replace(",", "").replace(",", "");
 
-    //         let ct_num = i;
-    //         let ct_name = $(product_list).find(".pic a").text();
-    //         let ct_result = $(product_list).find("._productSet_total").text();
+            list = [[ct_num, ct_name, ct_result]];
 
-    //         list = [[ct_num, ct_name, ct_result]];
-    //         console.log([list]);
-    //         let sql = "INSERT INTO shopping(ct_num, ct_name, ct_result) VALUES ?;";
-    //         conn.query(sql, [list], function (err, result, fields) { });
-    //     });
-    // }
-    // let data = [
-    //     {
-    //         "groupName": "마우스",
-    //         "keywords": [
-    //             "로지텍",
-    //             "Razor",
-    //             "맥스틸",
-    //             "Maxtill"
-    //         ]
-    //     },
-    //     {
-    //         "groupName": "걸그룹",
-    //         "keywords": [
-    //             "트와이스",
-    //             "Twice",
-    //             "아이즈원",
-    //             "IzOne"
-    //         ]
-    //     },
-    //     {
-    //         "groupName": "보이그룹",
-    //         "keywords": [
-    //             "엑소",
-    //             "BTS",
-    //             "빅뱅",
-    //             "버닝썬"
-    //         ]
-    //     }
-    // ];
-
-    // datalab("2019-02-01", "2019-04-30", "week", data, function (result) {
-    //     let colors = ["rgb(255, 192, 192)", "rgb(75, 192, 255)", "rgb(75, 255, 128)"];
-
-    //     let gData = {
-    //         "labels": [
-
-    //         ], "datasets": [
-
-    //         ]
-    //     };
-
-    //     let r = result.results;
-
-    //     for (let i = 0; i < r.length; i++) {
-
-    //         let item = {
-    //             "label": r[i].title,
-    //             "borderColor": colors[i],
-    //             "fill": false,
-    //             "lineTension": 0.2,
-    //             "data": []
-    //         };
-
-    //         for (let j = 0; j < r[i].data.length; j++) {
-    //             item.data.push(r[i].data[j].ratio);
-    //             if (i == 0) {
-    //                 let date = r[i].data[j].period;
-    //                 let arr = date.split("-");
-    //                 gData.labels.push(arr[1] + arr[2]);
-    //             }
-
-    //         }
-
-    //         gData.datasets.push(item);
-
-    //     }
-
-    //     res.render('datalab2', {
-    //         g: gData
-    //     });
-    // });
-
+            let sql = "INSERT INTO shopping(ct_num, ct_name, ct_result) VALUES ?;";
+            conn.query(sql, [list], function (err, result, fields) { });
+        });
+    }
+    let sql = "SELECT * FROM shopping;";
+    conn.query(sql, function (err, result) {
+        res.render('datalab2', { msg: '카테고리별 검색결과 수', list: result });
+    });
 });
 
 let server = http.createServer(app);
